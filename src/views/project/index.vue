@@ -82,6 +82,13 @@
             @fieldsChange="handleFieldsChange"
           />
         </div>
+        <AddRecordDialog
+          :size="showAddRecordDialog"
+          :fields="fields"
+          :record="selectedRecord"
+          :router-fields="routerFields"
+          @close:size="closeRecordDialog"
+        />
       </template>
     </CLTabs>
   </div>
@@ -116,7 +123,7 @@
   import AddRecordDialog from "@/components/AddRecordDialog.vue";
 
   // 标签页数据
-  const activeTab = ref<number>(1);
+  const activeTab = ref<number>(2);
   const tabItems = ref<TabItem[]>([
     {
       id: 1,
@@ -269,7 +276,7 @@
       // 模拟网络延迟
       await new Promise((resolve) => setTimeout(resolve, 500));
       tableData.value =
-        activeTab.value === 1
+        activeTab.value === 1 || activeTab.value === 2
           ? JSON.parse(JSON.stringify(projectSampleData))
           : [];
     } catch (error) {

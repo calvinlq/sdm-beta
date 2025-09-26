@@ -27,7 +27,18 @@
             ></div>
             <span class="nav-text">项目</span>
           </RouterLink>
-          
+          <RouterLink
+            to="/wbs"
+            class="nav-item"
+            @mouseenter="hoverNavItem(true, 'wbs')"
+            @mouseleave="hoverNavItem(false, 'wbs')"
+          >
+            <div
+              class="nav-icon"
+              :class="{ 'nav-icon-hover': hoveredNavItem === 'wbs' }"
+            ></div>
+            <span class="nav-text">WBS任务管理</span>
+          </RouterLink>
 
           <RouterLink
             to="/table"
@@ -39,22 +50,31 @@
               class="nav-icon"
               :class="{ 'nav-icon-hover': hoveredNavItem === 'wbs' }"
             ></div>
-            <span class="nav-text">数据表页</span>
+            <span class="nav-text">概览</span>
           </RouterLink>
-
-          
-
           <RouterLink
-            to="/about"
+            to="/lifecycle"
             class="nav-item"
-            @mouseenter="hoverNavItem(true, 'about')"
-            @mouseleave="hoverNavItem(false, 'about')"
+            @mouseenter="hoverNavItem(true, 'lifecycle')"
+            @mouseleave="hoverNavItem(false, 'lifecycle')"
           >
             <div
               class="nav-icon"
-              :class="{ 'nav-icon-hover': hoveredNavItem === 'about' }"
+              :class="{ 'nav-icon-hover': hoveredNavItem === 'lifecycle' }"
             ></div>
-            <span class="nav-text">关于我们</span>
+            <span class="nav-text">生命周期</span>
+          </RouterLink>
+          <RouterLink
+            to="/workStatus"
+            class="nav-item"
+            @mouseenter="hoverNavItem(true, 'workStatus')"
+            @mouseleave="hoverNavItem(false, 'workStatus')"
+          >
+            <div
+              class="nav-icon"
+              :class="{ 'nav-icon-hover': hoveredNavItem === 'workStatus' }"
+            ></div>
+            <span class="nav-text">工作项状态</span>
           </RouterLink>
         </div>
       </section>

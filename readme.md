@@ -1,3 +1,28 @@
+# sdm-beta
+
+Simple description of the project. Replace this section with a project overview.
+
+## Quick start
+
+Install dependencies and run locally:
+
+```bash
+bun install
+bun run dev
+```
+
+## Development
+
+- Code style: ESLint
+- Build: rsbuild (see `rsbuild.config.ts`)
+
+## Contributing
+
+See `CONTRIBUTING.md` for the contribution guide.
+
+## License
+
+This project is licensed under the MIT License - see the `LICENSE` file for details.
 # Rsbuild project
 
 ## Setup

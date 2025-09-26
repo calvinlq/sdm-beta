@@ -64,13 +64,14 @@
     ProjectNode,
     TreeNodeData,
   } from "./interface.ts";
+  import type { SoftwareNode } from "@/data/wbsFields.ts";
 
   // 定义props
   interface TableProps {
     fields: DynamicField[];
     activeTab?: number;
     // 从父组件传递的初始数据
-    initialData?: ProjectNode[];
+    initialData?: ProjectNode[] | SoftwareNode[];
     initialLinks?: [];
     // 行高设置
     lineHeight?: "low" | "medium" | "high" | "ultra-high";
@@ -1533,6 +1534,19 @@
             highlightMode: "row",
             disableHeaderHover: true,
           },
+          emptyTip: {
+            text: "暂无数据",
+            textStyle: {
+              fontSize: 10,
+              fontWeight: 400,
+              color: "#646a73",
+              lineHeight: 0,
+            },
+            icon: {
+              width: 40,
+              height: 30,
+            },
+          },
         },
         tasksShowMode: VTableGantt.TYPES.TasksShowMode.Tasks_Separate,
         taskBar: {
@@ -1744,8 +1758,11 @@
       } else {
         const no = record.no;
         const rs = removeChildNode(tableOption.value.records, no);
-        if (rs) {
-          tableInstance.setRecords(tableOption.value.records);
+        if (rs && props.tableConfig?.mode === "gantt") {
+          newTableInstance.setRecords(tableOption.value.records);
+          const data = (newTableInstance as any).internalProps.dataSource;
+          data.canChangeOrder = canChangeOrder;
+          data.changeOrder = changeOrder;
         }
       }
       if (sameParent && sourceIndex < targetIndex - 1) {
@@ -1767,7 +1784,6 @@
         insertPath[insertPath.length - 1] = targetIndex;
         (dataSource as any).addRecordsForTree([record], insertPath);
       }
-      emit("update:initialData", originalData.value);
     } catch (err) {
       console.error("changeOrder 出现未捕获异常：", err);
     }
@@ -2109,7 +2125,14 @@
 
     tableInstance.on("change_cell_value", (args: any) => {
       // 编辑单元格数据
-      console.log("change_cell_value", args);
+      // console.log("change_cell_value", args);
+      emit("update:saveField", originalData.value);
+      const record = tableInstance.getCellInfo(args.col, args.row);
+      emit("on-more-action", "change_cell_value", record.originData);
+    });
+    tableInstance.on("dblclick_cell", (args: any) => {
+      // 双击单元格数据
+      // console.log("dblclick_cell", args);
       emit("update:saveField", originalData.value);
     });
 
@@ -2297,20 +2320,6 @@
         },
       );
     }
-
-    // 监听initialData变化，动态更新表格数据
-    watch(
-      () => props.initialData,
-      (newData) => {
-        if (tableContainer.value) {
-          originalData.value = JSON.parse(JSON.stringify(newData || []));
-          initTable();
-          // 数据更新后重新应用行高设置
-          applyLineHeight();
-        }
-      },
-      { deep: true },
-    );
 
     // 监听fields变化，动态更新表格列
     watch(
